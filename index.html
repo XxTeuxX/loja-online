@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Belga Importens</title>
+    <link rel="stylesheet" href="styles/style.css">
+
+</head>
+<body>
+
+    <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Loja Online</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header>
+        <h1>Minha Loja</h1>
+        <nav>
+            <button id="view-cart">Carrinho 🛒 (<span id="cart-count">0</span>)</button>
+        </nav>
+    </header>
+
+    <!-- CATÁLOGO DE PRODUTOS -->
+    <section id="produtos">
+        <h2>Produtos em Destaque</h2>
+        <div class="produtos-container">
+            <!-- Produtos dinâmicos via JS -->
+        </div>
+    </section>
+
+    <!-- CARRINHO (Modal) -->
+    <div id="carrinho-modal" class="hidden">
+        <h2>Seu Carrinho</h2>
+        <div id="carrinho-itens"></div>
+        <p>Total: R$ <span id="carrinho-total">0.00</span></p>
+        <button id="finalizar-compra">Finalizar Compra</button>
+        <button id="fechar-carrinho">Fechar</button>
+    </div>
+    <!-- MODAL PARA EXIBIR A IMAGEM -->
+<div id="imagem-modal" class="hidden">
+    <span id="fechar-modal">&times;</span>
+    <img id="imagem-ampliada" src="" alt="Imagem Ampliada">
+</div>
+
+
+    <script>
+        // Dados dos produtos
+        const produtos = [
+            { id: 1, nome: "Mizuno Wave Prophcy LS", preco: 380.00, img: "imagens/produto1.jpg" },
+            { id: 2, nome: "Louis Vuitton trainer 2", preco: 399.99, img: "imagens/produto2.jpg" },
+            { id: 3, nome: "3", preco: 299.90, img: "imagens/produto3.jpg" },
+            { id: 4, nome: "Nike Nocto Glide White", preco: 499.90, img: "imagens/produto4.jpg" },
+            { id: 5, nome: "Nike Shox 12 Molas", preco: 699.99, img: "imagens/produto5.jpg" },
+            { id: 6, nome: "T-clip Lacoste", preco: 199.90, img: "imagens/produto6.jpg" },
+            { id: 7, nome: "Nike Air Jordan Low", preco: 599.90, img: "imagens/produto7.jpg" },
+            { id: 8, nome: "Oakley Flak 365 bege", preco: 300.00, img: "imagens/produto8.jpg" },
+            { id: 9, nome: "Nike Air Max Tn Plus", preco: 399.90, img: "imagens/produto9.jpg" },
+            { id: 10, nome: "Louis Vuitton Skate", preco: 549.90, img: "imagens/produto10.jpg" },
+            { id: 11, nome: "Nike Air Max 90", preco: 499.99, img: "imagens/produto11.jpg" },
+            { id: 12, nome: "Produto 12", preco: 99.90, img: "imagens/produto12.jpg" },
+            { id: 13, nome: "Produto 13", preco: 99.90, img: "imagens/produto13.jpg" },
+            { id: 14, nome: "Produto 14", preco: 49.90, img: "imagens/produto14.jpg" },
+            { id: 15, nome: "Produto 15", preco: 79.90, img: "imagens/produto15.jpg" },
+            { id: 16, nome: "Produto 16", preco: 99.90, img: "imagens/produto16.jpg" },
+            { id: 17, nome: "Produto 17", preco: 49.90, img: "imagens/produto17.jpg" },
+            { id: 18, nome: "Produto 18", preco: 79.90, img: "imagens/produto18.jpg" },
+            { id: 19, nome: "Produto 19", preco: 99.90, img: "imagens/produto19.jpg" },
+            { id: 20, nome: "Produto 20", preco: 49.90, img: "imagens/produto20.jpg" },
+            { id: 21, nome: "Produto 21", preco: 79.90, img: "imagens/produto21.jpg" },
+            { id: 22, nome: "Produto 22", preco: 99.90, img: "imagens/produto22.jpg" }
+            
+        ];
+
+        // Abrir Modal ao Clicar na Imagem
+document.addEventListener('click', function (e) {
+    if (e.target.classList.contains('produto-img')) {
+        const modal = document.getElementById('imagem-modal');
+        const imagemAmpliada = document.getElementById('imagem-ampliada');
+        imagemAmpliada.src = e.target.src;
+        modal.classList.add('visible');
+    }
+});
+
+// Fechar Modal
+document.getElementById('fechar-modal').addEventListener('click', () => {
+    document.getElementById('imagem-modal').classList.remove('visible');
+});
+        let carrinho = [];
+        // Renderizar produtos
+        const produtosContainer = document.querySelector('.produtos-container');
+
+        produtos.forEach(produto => {
+    const div = document.createElement('div');
+    div.classList.add('produto');
+    div.innerHTML = `
+        <img src="${produto.img}" alt="${produto.nome}" class="produto-img">
+        <h3>${produto.nome}</h3>
+        <p>R$ ${produto.preco.toFixed(2)}</p>
+        <button onclick="adicionarAoCarrinho(${produto.id})">Adicionar ao Carrinho</button>
+    `;
+    produtosContainer.appendChild(div);
+});
+
+
+
+
+
+        // Adicionar ao carrinho
+        function adicionarAoCarrinho(id) {
+            const produto = produtos.find(p => p.id === id);
+            carrinho.push(produto);
+            atualizarCarrinho();
+        }
+
+        // Atualizar carrinho
+        function atualizarCarrinho() {
+            document.getElementById('cart-count').textContent = carrinho.length;
+            const carrinhoItens = document.getElementById('carrinho-itens');
+            carrinhoItens.innerHTML = '';
+
+            let total = 0;
+            carrinho.forEach(item => {
+                carrinhoItens.innerHTML += `<p>${item.nome} - R$ ${item.preco.toFixed(2)}</p>`;
+                total += item.preco;
+            });
+
+            document.getElementById('carrinho-total').textContent = total.toFixed(2);
+        }
+
+        // Mostrar e fechar carrinho
+        const carrinhoModal = document.getElementById('carrinho-modal');
+
+        document.getElementById('view-cart').addEventListener('click', () => {
+            carrinhoModal.classList.add('visible');
+        });
+
+        document.getElementById('fechar-carrinho').addEventListener('click', () => {
+            carrinhoModal.classList.remove('visible');
+        });
+
+        // Finalizar compra
+        document.getElementById('finalizar-compra').addEventListener('click', () => {
+            if (carrinho.length === 0) {
+                alert("O carrinho está vazio!");
+            } else {
+                alert("Compra finalizada com sucesso!");
+                carrinho = [];
+                atualizarCarrinho();
+                carrinhoModal.classList.remove('visible');
+            }
+        });
+    </script>
+
+</body>
+</html>
