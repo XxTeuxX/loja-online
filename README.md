@@ -1,5 +1,5 @@
 # loja-online
 loja online inicial
 
-fiz alterações para deixar o codigo respnsivo e algumas alterações no desnig 
+fiz alterações para deixar o codigo responsivo e algumas alterações no desnig 
 
